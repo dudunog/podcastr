@@ -6,6 +6,7 @@ import Head from "next/head";
 
 import { GetStaticPaths, GetStaticProps } from "next";
 
+import { api } from "../../services/api";
 import { convertDurationToTimeString } from "../../utils/convertDurationToTimeString";
 
 import styles from "./episode.module.scss";
@@ -69,15 +70,16 @@ export default function Episode({ episode }: EpisodeProps) {
   );
 }
 
-const episodesJson = require("../../../server.json");
-
 export const getStaticPaths: GetStaticPaths = async () => {
-  var latestEpisodes = [];
-  for (let i = 0; i < 2; i++) {
-    latestEpisodes.push(episodesJson.episodes[i]);
-  }
+  const { data } = await api.get("episodes", {
+    params: {
+      _limit: 2,
+      _sort: "published_at",
+      _order: "desc",
+    },
+  });
 
-  const paths = latestEpisodes.map((episode) => {
+  const paths = data.map((episode) => {
     return {
       params: {
         slug: episode.id,
@@ -94,20 +96,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params;
 
-  const result = episodesJson.episodes.find((element) => element.id == slug);
+  const { data } = await api.get(`/episodes/${slug}`);
 
   const episode = {
-    id: result.id,
-    title: result.title,
-    thumbnail: result.thumbnail,
-    members: result.members,
-    publishedAt: format(parseISO(result.published_at), "d MMM yy", {
+    id: data.id,
+    title: data.title,
+    thumbnail: data.thumbnail,
+    members: data.members,
+    publishedAt: format(parseISO(data.published_at), "d MMM yy", {
       locale: ptBR,
     }),
-    duration: Number(result.file.duration),
-    durationAsString: convertDurationToTimeString(Number(result.file.duration)),
-    description: result.description,
-    url: result.file.url,
+    duration: Number(data.file.duration),
+    durationAsString: convertDurationToTimeString(Number(data.file.duration)),
+    description: data.description,
+    url: data.file.url,
   };
 
   return {
