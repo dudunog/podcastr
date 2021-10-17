@@ -13,7 +13,7 @@
 </p>
 
 <div align="center">
-    <img alt="Letmeask" title="Letmeask" src="src/assets/images/Letmeask.png" />
+    <img alt="Letmeask" title="Letmeask" src="src/assets/images/Podcastr.png" />
 </div>
 
 <br>
