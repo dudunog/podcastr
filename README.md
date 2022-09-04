@@ -32,4 +32,4 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 1. Clone este repositório `git clone https://github.com/dudunog/podcastr.git`
 2. Entre no diretório do projeto `cd podcastr`
 3. Instale as dependências com `yarn install` ou `npm install`
-5. Inicie o projeto com `yarn start`
+5. Inicie o projeto com `yarn run start` ou `npm run start`
